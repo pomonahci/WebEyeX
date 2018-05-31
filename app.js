@@ -12,56 +12,60 @@ app.use(express.static('scripts'))
 const port = 3000;
 
 io.of('/data').on('connection', socket => {
-  console.log('connected'); 
+  console.log('connected');
+  var eyeTracker = gazejs.createEyeTracker(gazejs.TOBII_GAZE_SDK);//or gazejs.SR_EYELINK_SDK
+  var listener = {
+      onConnect:function(){
+          console.log("Library version: "+eyeTracker.getLibraryVersion());
+          console.log("Model name: "+eyeTracker.getModelName());
+
+          eyeTracker.start();
+          console.log("OnConnect");
+      },
+      onStart:function(){
+          console.log("OnStart");
+      },
+      onStop:function(){
+          console.log("OnStop");
+      },
+      onError:function(error){
+          console.log(error);
+      },
+      onGazeData:function(gazeData){
+          console.log(gazeData);
+          if('prefered' in gazeData) {
+            if(gazeData.prefered !== undefined) {
+            toSend = gazeData.prefered.x + "," + gazeData.prefered.y;
+            var stream = ss.createStream();
+            var s = new Readable();
+            s._read = function() {};
+            s.push(toSend);
+            s.pipe(stream);
+            ss(socket).emit('gaze', stream, "yeah");
+            console.log("Pushed to stream.");
+          }
+        }
+      }
+  };
+
+  eyeTracker.setListener(listener);
+  eyeTracker.connect();
 
   socket.on('disconnected', () => {
     console.log("disconnected");
   })
 
   var timer = setInterval(function() {
-    var stream = ss.createStream();
-    var s = new Readable();
-    s._read = function() {};
-    s.push("Hello");
-    s.pipe(stream);
-    ss(socket).emit('gaze', stream, "yeah");
-    console.log("Pushed to stream.");
+
   }, 1000);
 
 });
-
-// var eyeTracker = gazejs.createEyeTracker(gazejs.TOBII_GAZE_SDK);//or gazejs.SR_EYELINK_SDK
-// var listener = {
-//     onConnect:function(){
-//         console.log("Library version: "+eyeTracker.getLibraryVersion());
-//         console.log("Model name: "+eyeTracker.getModelName());
-
-//         eyeTracker.start();
-//         console.log("OnConnect");
-//     },
-//     onStart:function(){
-//         console.log("OnStart");
-//     },
-//     onStop:function(){
-//         console.log("OnStop");
-//     },
-//     onError:function(error){
-//         console.log(error);
-//     },
-//     onGazeData:function(gazeData){
-//         if('prefered' in gazeData) {
-//           console.log('data');
-//           sendData()
-//         }
-//     }
-// };
 
 // io.on('stop', function() {
 //   eyeTracker.release();
 // })
 
-// eyeTracker.setListener(listener);
-// eyeTracker.connect();
+
 
 app.get('/', function (req, res) {
    res.sendFile(path.join(__dirname, 'index.html'));

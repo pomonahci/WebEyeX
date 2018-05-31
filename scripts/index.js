@@ -13,6 +13,12 @@ $(function(){
               dataString = '';
               dataString += data2;
               console.log(dataString);
+              var strings = dataString.split(',');
+              var x = parseFloat(strings[0]);
+              var y = parseFloat(strings[1]);
+              var prefX = x * screen.width;
+              var prefY = y * screen.height - (window.outerHeight - window.innerHeight);
+              draw(prefX,prefY);
             })
           })
         });
