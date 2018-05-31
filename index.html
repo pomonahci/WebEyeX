@@ -12,67 +12,11 @@
 </style>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
 <script type="text/javascript" src="./socket.io-stream.js"></script>
-
-<script>
-  var socket = io();
-</script>
-
 </head>
 
 <body>
     <canvas id="canvas"></canvas>
-    <script>
-
-
-    $(function(){
-        var socket = io.connect("/data");
-        ss(socket).on('data', function(stream, data) {
-          console.log("reading: ")
-          result = stream.read();
-          console.log(data);
-          console.log(result);
-        });
-
-
-        var canvas=document.getElementById("canvas");
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-        document.body.scrollTop = 0;
-        document.body.style.overflow = 'hidden';
-        var eye=canvas.getContext("2d");
-        var num = 0;
-
-        var canvasOffset=$("#canvas").offset();
-        var offsetX=canvasOffset.left;
-        var offsetY=canvasOffset.top;
-
-        function draw(x,y){
-            eye.clearRect(0,0,canvas.width,canvas.height);
-            eye.beginPath();
-            eye.fillStyle="red";
-            eye.rect(x,y,10,10);
-            eye.fill();
-            eye.stroke();
-        }
-
-        function handleMouseDown(e){
-          socket.emit('stop');
-        }
-
-        $("#canvas").mousedown(function(e){handleMouseDown(e);});
-
-        socket.on('gazeData', function(data){
-          if(data !== null) {
-          prefX = data.x * screen.width;
-          prefY = data.y * screen.height - (window.outerHeight - window.innerHeight);
-          console.log("recieved: "+ num);
-          num++;
-          draw(prefX, prefY);
-        }
-        });
-
-    }); // end $(function(){});
-    </script>
+    <script type="text/javascript" src="./bundle.js"></script>
 </body>
 
 </html>
