@@ -2,6 +2,9 @@
 
 This simple Node.js app visualizes data from the Tobii EyeX Eye Tracker onto a webpage. Only runs on Windows machines.
 
+
+![Screen Shot](WebEyeX_screen.png?raw=true "Screen Shot")
+
 ### Dependencies Used
 * [GazeJS](https://github.com/jiahansu/GazeJS)
 * [socket.io](https://github.com/socketio/socket.io)
