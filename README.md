@@ -20,7 +20,7 @@ appropriately to pinpoint current gaze.
 ### Set Up
 Download the files or clone them and then download the dependencies as described on their respective sites. To run the server
 open PowerShell and navigate to the root directory of the project and type the command ``` node app.js ``` In your browser navigate 
-to localhost:3000 or whatever port responds (this will be logged in PowerShell).
+to localhost:3000 or whatever port responds (this will be logged in PowerShell). Your browser is not running the file index.html supplemented by the index.js file (found in the scripts directory) You can modify these files for your application.
 
 #### Created By
 [Kevin Lee](https://github.com/kevinsangholee) & [Ethan Hardacre](https://github.com/ehardacre)
